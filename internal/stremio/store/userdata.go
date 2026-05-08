@@ -55,6 +55,11 @@ func (ud *UserData) getIdPrefixes() []string {
 		if ud.StoreName == "" {
 			if user, err := util.ParseBasicAuth(ud.StoreToken); err == nil {
 				if password := config.Auth.GetPassword(user.Username); password != "" && password == user.Password {
+					if ud.EnableUsenet {
+						storeCode := store.StoreNameStremThru.Code()
+						usenetCode := string(storeCode) + "-usenet"
+						ud.idPrefixes = append(ud.idPrefixes, getIdPrefix(usenetCode))
+					}
 					for _, name := range config.StoreAuthToken.ListStores(user.Username) {
 						storeName := store.StoreName(name)
 						storeCode := "st-" + string(storeName.Code())
