@@ -23,13 +23,13 @@ jobs:
 
       - run: pnpm install --no-frozen-lockfile
 
+      - name: Ensure dash output dir exists
+        run: mkdir -p apps/dash/.output/public
+
       - name: Build dash frontend
         working-directory: apps/dash
-        run: |
-          pnpm run build 2>/dev/null || {
-            echo "Dash build failed (non-critical), creating placeholder"
-            mkdir -p .output/public
-          }
+        continue-on-error: true
+        run: pnpm run build
 
       - uses: docker/login-action@v3
         with:
